@@ -15,24 +15,24 @@ struct PerfilView: View {
     var body: some View {
         NavigationView {
             VStack {
-                // Top purple wave background
+                // Lo del Fondo
                 Wave()
-                    .fill(Color.purple.opacity(0.6))
+                    .fill(Color.purple.opacity(0.4))
                     .frame(height: 200)
-                    .offset(y: -200)
+                    .offset(y: -190)
                 
-                // Profile picture placeholder
-                Circle()
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: 150, height: 150)
-                    .offset(y: -200)
-                
+                // Foto de perfil
+                Image("Perfil_Fotos")
+                    .resizable()
+                    .frame(width: 200, height: 200)
+                    .clipShape(Circle())
+                    .offset(y: -100)
                 // Las lineas
                 VStack(alignment: .leading, spacing: 24) {
                     // luego usamos una clase usuario
                     
-                    ProfileRow(title: "Nombre : ")
-                    ProfileRow(title: "Correo : ")
+                    ProfileRow(title: "Nombre : Snoopy")
+                    ProfileRow(title: "Correo : charliesbestie@puppyfarm.com")
                     ProfileRow(title: "Cambiar contraseña")
                     ProfileRow(title: "Notificaciones")
                     ProfileRow(title: "Cerrar Sesión")
@@ -85,21 +85,6 @@ struct ProfileRow: View {
     }
 }
 
-struct NavigationItem: View {
-    let icon: String
-    let text: String
-    var isSelected: Bool = false
-    
-    var body: some View {
-        VStack(spacing: 4) {
-            Image(systemName: icon)
-                .foregroundColor(isSelected ? .blue : .gray)
-            Text(text)
-                .font(.system(size: 12))
-                .foregroundColor(isSelected ? .blue : .gray)
-        }
-    }
-}
 
 // la barra de navegacion
 func navigationBar () -> some View{
@@ -124,3 +109,20 @@ func navigationBar () -> some View{
     )
 }
 
+// Cada elemento de la navegacion (los iconos)
+struct NavigationItem: View {
+    
+    let icon: String
+    let text: String
+    var isSelected: Bool = false
+    
+    var body: some View {
+        VStack(spacing: 4) {
+            Image(systemName: icon)
+                .foregroundColor(isSelected ? .blue : .gray)
+            Text(text)
+                .font(.system(size: 12))
+                .foregroundColor(isSelected ? .blue : .gray)
+        }
+    }
+}
