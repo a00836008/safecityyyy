@@ -27,22 +27,24 @@ struct PerfilView: View {
                     .frame(width: 200, height: 200)
                     .clipShape(Circle())
                     .offset(y: -100)
+                
                 // Las lineas
                 VStack(alignment: .leading, spacing: 24) {
-                    // luego usamos una clase usuario
-                    
-                    ProfileRow(title: "Nombre : Snoopy")
-                    ProfileRow(title: "Correo : charliesbestie@puppyfarm.com")
-                    ProfileRow(title: "Cambiar contraseña")
-                    ProfileRow(title: "Notificaciones")
-                    ProfileRow(title: "Cerrar Sesión")
-                    
+                    // Luego ponemos los de la clase usuarui
+                    ProfileRow(title: "Nombre"                , subtitle: "Snoopy")
+                    ProfileRow(title: "Correo"                , subtitle: "charliesbestie@puppyfarm.com")
+                    ProfileRow(title: "Cambiar contraseña"    , subtitle: "")
+                    ProfileRow(title: "Notificaciones"        , subtitle: "")
+                    NavigationLink(destination: LoginView()){
+                        ProfileRow(title: "Cerrar Sesión"         , subtitle: "")
+                    }
                 }
                 .padding(.horizontal)
                 .offset(y: -40)
                 
                 Spacer()
                 
+                // Barra de navegación
                 navigationBar()
             }
             .navigationTitle("Mi Perfil")
@@ -66,17 +68,18 @@ struct Wave: Shape {
             control2: CGPoint(x: rect.maxX * 0.25, y: rect.maxY * 0.4)
         )
         path.closeSubpath()
-        return path
+        return path;
     }
 }
 
+// los textos y las lineas
 struct ProfileRow: View {
     let title: String
-    
+    let subtitle: String
     var body: some View {
         VStack(alignment: .leading) {
-            Text(title)
-                .foregroundColor(.blue.opacity(0.8))
+            Text("\(title): \(subtitle)")
+                .foregroundColor(.purple.opacity(1))
                 .font(.system(size: 16))
             Rectangle()
                 .frame(height: 1)
@@ -85,31 +88,38 @@ struct ProfileRow: View {
     }
 }
 
-
-// la barra de navegacion
-func navigationBar () -> some View{
-    
+// -------------------------------------------------------------------------------------
+// La barra de navegacion
+func navigationBar() -> some View {
     HStack(spacing: 40) {
-        // no hacen nada , solo son los iconos
-        NavigationItem(icon: "house.fill"                       , text: "Inicio")
-        NavigationItem(icon: "bell.fill"                        , text: "Alertas")
-        NavigationItem(icon: "exclamationmark.triangle.fill"    , text: "Reportes")
-        NavigationItem(icon: "map.fill"                         , text: "Mapas")
-        NavigationItem(icon: "person.fill"                      , text: "Perfil", isSelected: true)
-        
-    } // Estilo
+        NavigationLink(destination: Text("Vista de Inicio")) {
+            NavigationItem(icon: "house.fill", text: "Inicio")
+        }
+        NavigationLink(destination: Text("Vista de Alertas")) {
+            NavigationItem(icon: "bell.fill", text: "Alertas")
+        }
+        NavigationLink(destination: Text("Vista de Reportes")) {
+            NavigationItem(icon: "exclamationmark.triangle.fill", text: "Reportes")
+        }
+        NavigationLink(destination: Text("Vista de Mapas")) {
+            NavigationItem(icon: "map.fill", text: "Mapas")
+        }
+        NavigationLink(destination: PerfilView()){
+            NavigationItem(icon: "person.fill", text: "Perfil", isSelected: true)
+        }
+    }
     .padding(.horizontal)
-    .padding(.vertical, 8)
-    .background(Color.white)
-    .overlay(
-        Rectangle()
-            .frame(height: 1)
-            .foregroundColor(.gray.opacity(0.2)),
-        alignment: .top
-    )
+        .padding(.vertical, 8)
+        .background(Color.white)
+        .overlay(
+            Rectangle()
+                .frame(height: 1)
+                .foregroundColor(.gray.opacity(0.2)),
+            alignment: .top
+        )
 }
 
-// Cada elemento de la navegacion (los iconos)
+// Cada elemento de la navegación (los íconos)
 struct NavigationItem: View {
     
     let icon: String
@@ -119,10 +129,11 @@ struct NavigationItem: View {
     var body: some View {
         VStack(spacing: 4) {
             Image(systemName: icon)
-                .foregroundColor(isSelected ? .blue : .gray)
+                .foregroundColor(isSelected ? .purple : .gray)
             Text(text)
                 .font(.system(size: 12))
-                .foregroundColor(isSelected ? .blue : .gray)
+                .foregroundColor(isSelected ? .purple : .gray)
         }
     }
 }
+// -------------------------------------------------------------------------------------
