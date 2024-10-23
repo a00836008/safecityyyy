@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct safeCityApp: App {
+    @State private var locationManager = LocationManager()
     var body: some Scene {
         WindowGroup {
-            MapRouteView()
+            if locationManager.isAuthorized {
+                StartTab()
+            } 
         }
+        .modelContainer(for: Destination.self)
+        .environment(locationManager)
     }
 }
