@@ -20,7 +20,6 @@ struct PerfilView: View {
                     .fill(Color.purple.opacity(0.4))
                     .frame(height: 200)
                     .offset(y: -200)
-                Spacer()
                 // Foto de perfil
                 Image("Perfil_Fotos")
                         .resizable()
