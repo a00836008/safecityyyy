@@ -121,7 +121,7 @@ struct Boton_:View {
                 Text(texto_boton)
                     .foregroundColor(.gray)
                     .padding(.vertical, 8)
-                    .padding(.horizontal, 20)
+                    .padding(.horizontal,120)
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(8)
             }
