@@ -12,11 +12,9 @@ struct ReporteView: View {
     @State private var categoria: Int = 1
     @State private var categoriaStr = "Robo"
     @State private var sliderVal = 1.0
-    map:MapaView = MapaView()
     var body: some View {
         Text("Generación de reporte")
         VStack(alignment: .leading){
-            map
             Text("¿Qué pasó?")
                 .fontWeight(.bold)
                 .foregroundColor(Color(red: 0.13725490196078433, green: 0.1803921568627451, blue: 0.12941176470588237))
