@@ -25,21 +25,23 @@ struct PerfilView: View {
                         .resizable()
                         .frame(width: 200, height: 200)
                         .clipShape(Circle())
-                        .offset(y: -100)
+                        .offset(y: -180)
                 // Las líneas
                 VStack(alignment: .leading, spacing: 20) {
                     // Información de perfil
                     //ProfileRow(title: "Nombre", subtitle: "Snoopy", size: 14)
                     Text("Snoopy")
-                        .font(.system(size: 40))
+                        .font(.system(size: 50))
                         .fontWeight(.semibold)
                         .accessibilityLabel("Nombre de usuario")
                         .frame(maxWidth: .infinity, alignment: .center)
+                        .offset(y: -140)
                     ProfileRow(title: "Correo", subtitle: "charliesbestie@puppyfarm.com", size: 14)
+                        .offset(y: -80)
                     
                     // Botones de cambiar contraseña y cerrar sesión
                     //Boton_(texto_boton: "Cambiar contraseña", destino: "Inicio Sesuion")
-                    Spacer()
+                    
                     Boton_(texto_boton: "Cerrar sesión", destino: "Inicio")
                     
                 }
