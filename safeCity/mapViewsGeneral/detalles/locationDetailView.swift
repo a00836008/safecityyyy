@@ -17,6 +17,7 @@ struct LocationDetailView: View {
     @Binding var showRoute: Bool
     @Binding var travelInterval: TimeInterval?
     @Binding var transportType: MKDirectionsTransportType
+    @EnvironmentObject var sensorManager: SensorManager
     
     var travelTime: String? {
         guard let travelInterval else { return nil }
@@ -158,6 +159,7 @@ struct LocationDetailView: View {
             }
         }
     }
+    
     func fetchLookaroundPreview() async {
         if let selectedPlacemark {
             lookaroundScene = nil
