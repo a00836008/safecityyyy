@@ -12,32 +12,39 @@ import SwiftUI
 }
 
 struct PerfilView: View {
+    
+    
     var body: some View {
         NavigationView {
             VStack {
-                // Lo del Fondo
+                // Fondo
                 Wave()
                     .fill(Color.purple.opacity(0.4))
                     .frame(height: 200)
-                    .offset(y: -190)
-                
+                    .offset(y: -200)
+                Spacer()
                 // Foto de perfil
                 Image("Perfil_Fotos")
-                    .resizable()
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .offset(y: -100)
-                
-                // Las lineas
-                VStack(alignment: .leading, spacing: 24) {
-                    // Luego ponemos los de la clase usuarui
-                    ProfileRow(title: "Nombre"                , subtitle: "Snoopy")
-                    ProfileRow(title: "Correo"                , subtitle: "charliesbestie@puppyfarm.com")
-                    ProfileRow(title: "Cambiar contraseña"    , subtitle: "")
-                    ProfileRow(title: "Notificaciones"        , subtitle: "")
-                    NavigationLink(destination: LoginView()){
-                        ProfileRow(title: "Cerrar Sesión"         , subtitle: "")
-                    }
+                        .resizable()
+                        .frame(width: 200, height: 200)
+                        .clipShape(Circle())
+                        .offset(y: -100)
+                // Las líneas
+                VStack(alignment: .leading, spacing: 20) {
+                    // Información de perfil
+                    //ProfileRow(title: "Nombre", subtitle: "Snoopy", size: 14)
+                    Text("Snoopy")
+                        .font(.system(size: 40))
+                        .fontWeight(.semibold)
+                        .accessibilityLabel("Nombre de usuario")
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    ProfileRow(title: "Correo", subtitle: "charliesbestie@puppyfarm.com", size: 14)
+                    
+                    // Botones de cambiar contraseña y cerrar sesión
+                    //Boton_(texto_boton: "Cambiar contraseña", destino: "Inicio Sesuion")
+                    Spacer()
+                    Boton_(texto_boton: "Cerrar sesión", destino: "Inicio Sesuion")
+                    
                 }
                 .padding(.horizontal)
                 .offset(y: -40)
@@ -49,12 +56,15 @@ struct PerfilView: View {
             }
             .navigationTitle("Mi Perfil")
             .navigationBarItems(trailing: Button(action: {}) {
-                Image(systemName: "square.and.arrow.up")
-                    .foregroundColor(.black)
+                NavigationLink(destination: Text("Las notificaciones")) {
+                    Image(systemName: "bell.badge")
+                        .foregroundColor(.black)
+                }
             })
         }
     }
 }
+
 
 struct Wave: Shape {
     func path(in rect: CGRect) -> Path {
@@ -74,13 +84,22 @@ struct Wave: Shape {
 
 // los textos y las lineas
 struct ProfileRow: View {
+    
     let title: String
     let subtitle: String
+    let size: CGFloat
+    
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(title): \(subtitle)")
-                .foregroundColor(.purple.opacity(1))
-                .font(.system(size: 16))
+            
+                Text("\(title)")
+                    .foregroundColor(.purple.opacity(1))
+                    .font(.system(size: size))
+                Text("\t \(subtitle)")
+                    .foregroundColor(.black.opacity(1.5))
+                    .font(.system(size: size + 3))
+                    .multilineTextAlignment(.leading)
+            
             Rectangle()
                 .frame(height: 1)
                 .foregroundColor(.gray.opacity(0.2))
@@ -88,15 +107,39 @@ struct ProfileRow: View {
     }
 }
 
+struct Boton_:View {
+    
+    let texto_boton: String
+    let destino: String
+    
+    var body: some View {
+        
+        VStack {
+            Button(action: {
+                // Acción del botón
+            }) {
+                Text(texto_boton)
+                    .foregroundColor(.gray)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 20)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(8)
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+        }
+
+    }
+}
+//
+//      La barra de navegacion
 // -------------------------------------------------------------------------------------
-// La barra de navegacion
 func navigationBar() -> some View {
     HStack(spacing: 40) {
         NavigationLink(destination: Text("Vista de Inicio")) {
             NavigationItem(icon: "house.fill", text: "Inicio")
         }
         NavigationLink(destination: Text("Vista de Alertas")) {
-            NavigationItem(icon: "bell.fill", text: "Alertas")
+            NavigationItem(icon: "bell.and.waves.left.and.right.fill", text: "Alertas")
         }
         NavigationLink(destination: Text("Vista de Reportes")) {
             NavigationItem(icon: "exclamationmark.triangle.fill", text: "Reportes")
@@ -104,9 +147,9 @@ func navigationBar() -> some View {
         NavigationLink(destination: Text("Vista de Mapas")) {
             NavigationItem(icon: "map.fill", text: "Mapas")
         }
-        NavigationLink(destination: PerfilView()){
+        //NavigationLink(destination: PerfilView()){
             NavigationItem(icon: "person.fill", text: "Perfil", isSelected: true)
-        }
+        //}
     }
     .padding(.horizontal)
         .padding(.vertical, 8)
