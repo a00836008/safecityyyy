@@ -12,10 +12,8 @@ import SwiftUI
 }
 
 struct PerfilView: View {
-    
-    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 // Fondo
                 Wave()
@@ -43,7 +41,7 @@ struct PerfilView: View {
                     // Botones de cambiar contraseña y cerrar sesión
                     //Boton_(texto_boton: "Cambiar contraseña", destino: "Inicio Sesuion")
                     Spacer()
-                    Boton_(texto_boton: "Cerrar sesión", destino: "Inicio Sesuion")
+                    Boton_(texto_boton: "Cerrar sesión", destino: "Inicio")
                     
                 }
                 .padding(.horizontal)
@@ -52,7 +50,7 @@ struct PerfilView: View {
                 Spacer()
                 
                 // Barra de navegación
-                navigationBar()
+                navigationBar (isActive_Profile: true)
             }
             .navigationTitle("Mi Perfil")
             .navigationBarItems(trailing: Button(action: {}) {
@@ -62,6 +60,7 @@ struct PerfilView: View {
                 }
             })
         }
+        .accentColor(.purple)
     }
 }
 
@@ -115,9 +114,8 @@ struct Boton_:View {
     var body: some View {
         
         VStack {
-            Button(action: {
-                // Acción del botón
-            }) {
+            NavigationLink(destination: Text(destino))
+            {
                 Text(texto_boton)
                     .foregroundColor(.gray)
                     .padding(.vertical, 8)
@@ -127,56 +125,5 @@ struct Boton_:View {
             }
             .frame(maxWidth: .infinity, alignment: .center)
         }
-
     }
 }
-//
-//      La barra de navegacion
-// -------------------------------------------------------------------------------------
-func navigationBar() -> some View {
-    HStack(spacing: 40) {
-        NavigationLink(destination: Text("Vista de Inicio")) {
-            NavigationItem(icon: "house.fill", text: "Inicio")
-        }
-        NavigationLink(destination: Text("Vista de Alertas")) {
-            NavigationItem(icon: "bell.and.waves.left.and.right.fill", text: "Alertas")
-        }
-        NavigationLink(destination: Text("Vista de Reportes")) {
-            NavigationItem(icon: "exclamationmark.triangle.fill", text: "Reportes")
-        }
-        NavigationLink(destination: Text("Vista de Mapas")) {
-            NavigationItem(icon: "map.fill", text: "Mapas")
-        }
-        //NavigationLink(destination: PerfilView()){
-            NavigationItem(icon: "person.fill", text: "Perfil", isSelected: true)
-        //}
-    }
-    .padding(.horizontal)
-        .padding(.vertical, 8)
-        .background(Color.white)
-        .overlay(
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.gray.opacity(0.2)),
-            alignment: .top
-        )
-}
-
-// Cada elemento de la navegación (los íconos)
-struct NavigationItem: View {
-    
-    let icon: String
-    let text: String
-    var isSelected: Bool = false
-    
-    var body: some View {
-        VStack(spacing: 4) {
-            Image(systemName: icon)
-                .foregroundColor(isSelected ? .purple : .gray)
-            Text(text)
-                .font(.system(size: 12))
-                .foregroundColor(isSelected ? .purple : .gray)
-        }
-    }
-}
-// -------------------------------------------------------------------------------------
