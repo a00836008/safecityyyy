@@ -34,14 +34,12 @@ struct TabBarModifier: ViewModifier {
             .toolbarBackground(.indigo.opacity(0.8), for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
-            .background(Color.white) // Background for the tab bar
+            .background(Color.white)
             .overlay(
                 Rectangle()
                     .frame(height: 1)
-                    .foregroundColor(.gray.opacity(0.2)), // Bottom border
+                    .foregroundColor(.gray.opacity(0.2)),
                 alignment: .top
             )
-            .padding(.horizontal)
-            .padding(.vertical, 8)
     }
 }
