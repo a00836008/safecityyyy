@@ -18,6 +18,7 @@ class Destination {
     var longitudeDelta: Double?
     @Relationship(deleteRule: .cascade)
     var placemarks: [MTPlacemark] = []
+    var reports: [Report] = []
     
     init(name: String, latitude: Double? = nil, longitude: Double? = nil, latitudeDelta: Double? = nil, longitudeDelta: Double? = nil) {
         self.name = name
