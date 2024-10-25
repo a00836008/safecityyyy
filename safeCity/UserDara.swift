@@ -15,6 +15,7 @@ class UserData: ObservableObject{
     @Published var cambiarContrasena: Bool
     @Published var notificaciones: Bool
     @Published var cerrarSesion: Bool
+    @Published var foto: String
     
     init(nombre: String, correo: String, cambiarContrasena: Bool, notificaciones: Bool, cerrarSesion: Bool) {
         self.nombre = nombre
@@ -23,6 +24,6 @@ class UserData: ObservableObject{
         self.notificaciones = notificaciones
         self.cerrarSesion = cerrarSesion
         self.isLoggedIn = true
-        
+        self.foto = "Perfil_Fotos"
     }
 }
