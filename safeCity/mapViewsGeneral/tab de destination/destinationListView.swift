@@ -1,10 +1,9 @@
 //
-//  destinationListView.swift
+//  DestinationsListView.swift
 //  safeCity
 //
 //  Created by Victoria Marin on 23/10/24.
 //
-
 
 import SwiftUI
 import SwiftData
@@ -12,25 +11,48 @@ import SwiftData
 struct DestinationsListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Destination.name) private var destinations: [Destination]
+    
     @State private var newDestination = false
     @State private var destinationName = ""
     @State private var path = NavigationPath()
+    @State private var showAddReportView = false
+    @State private var selectedDestination: Destination? // Track the selected destination for reporting
+
     var body: some View {
         NavigationStack(path: $path) {
             Group {
-                if !destinations.isEmpty{
+                if !destinations.isEmpty {
                     List(destinations) { destination in
-                        NavigationLink(value: destination){
-                            HStack {
-                                Image(systemName: "globe")
-                                    .imageScale(.large)
+                        HStack {
+                            // Existing destination information
+                            NavigationLink(value: destination) {
+                                HStack {
+                                    Image(systemName: "globe")
+                                        .imageScale(.large)
                                     
-                                VStack(alignment: .leading) {
-                                    Text(destination.name)
-                                    Text("^[\(destination.placemarks.count) location](inflect: true)")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                    VStack(alignment: .leading) {
+                                        Text(destination.name)
+                                        Text("^[\(destination.placemarks.count) location](inflect: true)")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                        Text("^[\(destination.reports.count) report](inflect: true)")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
                                 }
+                            }
+                            
+                            Spacer() // Push the button to the right
+
+                            // Red Alert Button for creating a report
+                            Button(action: {
+                                selectedDestination = destination
+                                showAddReportView.toggle()
+                            }) {
+                                Image(systemName: "exclamationmark.circle.fill")
+                                    .foregroundColor(.red)
+                                    .imageScale(.large)
+                                    .padding(.trailing)
                             }
                         }
                         .swipeActions(edge: .trailing) {
@@ -48,7 +70,7 @@ struct DestinationsListView: View {
                     ContentUnavailableView(
                         "No Destinations",
                         systemImage: "globe.desk",
-                        description: Text("You have not set up any destinations yet.  Tap on the \(Image(systemName: "plus.circle.fill")) button in the toolbar to begin.")
+                        description: Text("You have not set up any destinations yet. Tap on the \(Image(systemName: "plus.circle.fill")) button in the toolbar to begin.")
                     )
                 }
             }
@@ -76,7 +98,13 @@ struct DestinationsListView: View {
                     } message: {
                         Text("Create a new destination")
                     }
-
+            }
+            // Sheet presentation for adding a new report
+            .sheet(isPresented: $showAddReportView) {
+                if let destination = selectedDestination {
+                    // Pass the selected destination to ReportView
+                    ReportView(destination: destination)
+                }
             }
         }
     }

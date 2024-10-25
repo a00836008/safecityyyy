@@ -23,6 +23,11 @@ struct StartTab: View {
                         Label("Destinations", systemImage: "globe.desk")
                             .tint(.purple)
                     }
+                ReportsListView()
+                    .tabItem {
+                        Label("Reports", systemImage: "exclamationmark.circle.fill")
+                            .tint(.purple)
+                }
             }
             .toolbarBackground(.indigo .opacity(0.8), for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
@@ -32,8 +37,3 @@ struct StartTab: View {
 }
 
 
-#Preview {
-    StartTab()
-        .modelContainer(Destination.preview)
-        .environment(LocationManager())
-}

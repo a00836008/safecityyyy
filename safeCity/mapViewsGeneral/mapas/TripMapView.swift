@@ -38,15 +38,26 @@ struct TripMapView: View {
             ForEach(listPlacemarks) { placemark in
                 if !showRoute {
                     Group {
-                        if placemark.destination != nil {
-                            Marker(coordinate: placemark.coordinate) {
-                                Label(placemark.name, systemImage: "star")
-                            }
-                            .tint(.yellow)
-                        } else {
-                            Marker(placemark.name, coordinate: placemark.coordinate)
-                        }
-                    }.tag(placemark)
+                        // Check if the placemark's destination has reports
+                       let hasReports = placemark.destination?.reports.isEmpty == false
+                       
+                       if hasReports {
+                           // Display red alert marker if there are reports
+                           Marker(coordinate: placemark.coordinate) {
+                               Label(placemark.name, systemImage: "exclamationmark.triangle.fill")
+                           }
+                           .tint(.red)
+                       } else if placemark.destination != nil {
+                           // Default yellow star marker for destinations without reports
+                           Marker(coordinate: placemark.coordinate) {
+                               Label(placemark.name, systemImage: "star")
+                           }
+                           .tint(.yellow)
+                       } else {
+                           // Default marker for placemarks without a destination
+                           Marker(placemark.name, coordinate: placemark.coordinate)
+                       }
+                   }.tag(placemark)
                 } else {
                     if let routeDestination {
                         Marker(item: routeDestination)
@@ -228,8 +239,4 @@ struct TripMapView: View {
     }
 }
 
-#Preview {
-    TripMapView()
-        .environment(LocationManager())
-        .modelContainer(Destination.preview)
-}
+

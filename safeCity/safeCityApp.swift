@@ -19,7 +19,7 @@ struct safeCityApp: App {
                     .environmentObject(sensorManager) // lo pasa a todo el environment 
             }
         }
-        .modelContainer(for: Destination.self)
+        .modelContainer(for: [Destination.self, Report.self]) // SwiftData model container
         .environment(locationManager)
     }
 }

@@ -37,6 +37,7 @@ struct navigationBar : View {
             NavigationLink(destination: PerfilView()){
                 NavigationItem(icon: "person.fill", text: "Perfil", isSelected: isActive_Profile)
             }
+           
         }
         .padding(.horizontal)
             .padding(.vertical, 8)
