@@ -1,9 +1,4 @@
-//
-//  LocationManager.swift
-//  Ejemplo1Oct
-//  Basado en: https://medium.com/@desilio/getting-user-location-with-swiftui-1f79d23c2321
-//  Created by Cristina Gonzalez Cordova on 01/10/24.
-//
+
 
 import SwiftUI
 import CoreLocation
