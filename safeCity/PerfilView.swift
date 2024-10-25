@@ -12,6 +12,16 @@ import SwiftUI
 }
 
 struct PerfilView: View {
+    @State var showAlert: Bool = false
+    
+    var Usuario_principal = UserData(
+        nombre: "Victoria Marin",
+        correo: "vvmarin2004@gmail.com",
+        cambiarContrasena: false,
+        notificaciones: true,
+        cerrarSesion: false
+    )
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -22,46 +32,103 @@ struct PerfilView: View {
                     .offset(y: -200)
                 // Foto de perfil
                 Image("Perfil_Fotos")
-                        .resizable()
-                        .frame(width: 200, height: 200)
-                        .clipShape(Circle())
-                        .offset(y: -180)
-                // Las líneas
+                    .resizable()
+                    .frame(width: 200, height: 200)
+                    .clipShape(Circle())
+                    .offset(y: -180)
+                // Info Perfil
                 VStack(alignment: .leading, spacing: 20) {
-                    // Información de perfil
-                    //ProfileRow(title: "Nombre", subtitle: "Snoopy", size: 14)
-                    Text("Snoopy")
-                        .font(.system(size: 50))
+                    
+                    Text((Usuario_principal.nombre))
+                        .font(.system(size: 45))
                         .fontWeight(.semibold)
                         .accessibilityLabel("Nombre de usuario")
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .offset(y: -140)
-                    ProfileRow(title: "Correo", subtitle: "charliesbestie@puppyfarm.com", size: 14)
-                        .offset(y: -80)
+                        .offset(y: -150)
                     
-                    // Botones de cambiar contraseña y cerrar sesión
-                    //Boton_(texto_boton: "Cambiar contraseña", destino: "Inicio Sesuion")
-                    
-                    Boton_(texto_boton: "Cerrar sesión", destino: "Inicio")
-                    
+                    Group {
+                        Text((Usuario_principal.correo))
+                            .font(.system(size: 16))
+                            .fontWeight(.light)
+                            .foregroundColor(.black)
+                            .accessibilityLabel("Correo electrónico")
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .offset(y: -160)
+                    }
+                    .accentColor(.black)
+                                        
+                    Spacer()
+                    // Updated logout button
+                    Button(action: {
+                        showAlert = true
+                    }) {
+                        Text("Cerrar sesión")
+                            .foregroundColor(.gray)
+                            .padding(.vertical, 8)
+                            .padding(.horizontal,120)
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                    }
+                    .alert("¿Estás seguro?", isPresented: $showAlert) {
+                        Button("Cancelar", role: .cancel) { }
+                        Button("Cerrar Sesión", role: .destructive) {
+                            // Navigate to LoginView
+                            // You might want to handle this through a navigation state or environment object
+                            // This is a simplified version
+                            NavigationUtil.popToRootView()
+                        }
+                    } message: {
+                        Text("¿Deseas cerrar tu sesión?")
+                    }
                 }
                 .padding(.horizontal)
                 .offset(y: -40)
                 
                 Spacer()
-                
-                // Barra de navegación
-                navigationBar (isActive_Profile: true)
             }
-            .navigationTitle("Mi Perfil")
-            .navigationBarItems(trailing: Button(action: {}) {
-                NavigationLink(destination: Text("Las notificaciones")) {
-                    Image(systemName: "bell.badge")
-                        .foregroundColor(.black)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Mi Perfil")
+                        .font(.system(size: 30))
+                        .fontWeight(.bold)
+                        .offset(y: 70)
                 }
-            })
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {}) {
+                        NavigationLink(destination: Text("Las notificaciones")) {
+                            Image(systemName: "bell.badge")
+                                .foregroundColor(.black)
+                        }
+                    }
+                }
+            }
         }
         .accentColor(.purple)
+    }
+}
+
+// Utility to handle navigation
+struct NavigationUtil {
+    static func popToRootView() {
+        findNavigationController(viewController: UIApplication.shared.windows.first?.rootViewController)?
+            .popToRootViewController(animated: true)
+    }
+    
+    static func findNavigationController(viewController: UIViewController?) -> UINavigationController? {
+        guard let viewController = viewController else {
+            return nil
+        }
+        
+        if let navigationController = viewController as? UINavigationController {
+            return navigationController
+        }
+        
+        for childViewController in viewController.children {
+            return findNavigationController(viewController: childViewController)
+        }
+        
+        return nil
     }
 }
 
@@ -82,31 +149,6 @@ struct Wave: Shape {
     }
 }
 
-// los textos y las lineas
-struct ProfileRow: View {
-    
-    let title: String
-    let subtitle: String
-    let size: CGFloat
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            
-                Text("\(title)")
-                    .foregroundColor(.purple.opacity(1))
-                    .font(.system(size: size))
-                Text("\t \(subtitle)")
-                    .foregroundColor(.black.opacity(1.5))
-                    .font(.system(size: size + 3))
-                    .multilineTextAlignment(.leading)
-            
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.gray.opacity(0.2))
-        }
-    }
-}
-
 struct Boton_:View {
     
     let texto_boton: String
@@ -115,7 +157,7 @@ struct Boton_:View {
     var body: some View {
         
         VStack {
-            NavigationLink(destination: Text(destino))
+            NavigationLink(destination: LoginView())
             {
                 Text(texto_boton)
                     .foregroundColor(.gray)

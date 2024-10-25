@@ -22,6 +22,10 @@ struct StartTab: View {
                 .tabItem {
                     Label("Reports", systemImage: "exclamationmark.circle.fill")
                 }
+            PerfilView()
+                .tabItem {
+                    Label("Profile", systemImage: "person.crop.circle.fill")
+                }
         }
         .modifier(TabBarModifier())
     }
