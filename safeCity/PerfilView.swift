@@ -64,10 +64,13 @@ struct PerfilView: View {
                     }) {
                         Text("Cerrar sesión")
                             .foregroundColor(.gray)
-                            .padding(.vertical, 8)
+                            .padding(.vertical, 12)
                             .padding(.horizontal,120)
                             .background(Color.gray.opacity(0.2))
-                            .cornerRadius(8)
+                            .frame( alignment: .center)
+                            .clipShape(Capsule())
+                            .offset(x: 18)
+                            
                     }
                     .alert("¿Estás seguro?", isPresented: $showAlert) {
                         Button("Cancelar", role: .cancel) { }
