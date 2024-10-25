@@ -34,6 +34,6 @@ struct StartTab: View {
 
 #Preview {
     StartTab()
-        .modelContainer(Destination.preview)
+        .modelContainer([Destination.self, Report.self])
         .environment(LocationManager())
 }

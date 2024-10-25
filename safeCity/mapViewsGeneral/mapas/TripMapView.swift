@@ -231,5 +231,5 @@ struct TripMapView: View {
 #Preview {
     TripMapView()
         .environment(LocationManager())
-        .modelContainer(Destination.preview)
+        .modelContainer([Destination.self, Report.self])
 }

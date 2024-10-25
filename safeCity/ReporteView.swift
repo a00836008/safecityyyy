@@ -1,62 +1,108 @@
 //
-//  ReporteView.swift
+//  ReportView.swift
 //  safeCity
 //
 //  Created by Danaé Sánchez on 23/10/24.
 //
 
 import SwiftUI
+import SwiftData
 
-struct ReporteView: View {
-    @State private var descripcion = ""
-    @State private var categoria: Int = 1
-    @State private var categoriaStr = "Robo"
-    @State private var sliderVal = 1.0
+struct ReportView: View {
+    @Environment(\.modelContext) private var modelContext // Access to SwiftData model context
+    
+    @State private var des = ""
+    @State private var category: Int = 1
+    @State private var categoryStr = "Robbery"
+    @State private var sliderValue = 1.0
+    
     var body: some View {
-        Text("Generación de reporte")
-        VStack(alignment: .leading){
-            Text("¿Qué pasó?")
+        VStack(alignment: .leading) {
+            Text("Report Generation")
+                .font(.title)
                 .fontWeight(.bold)
-                .foregroundColor(Color(red: 0.13725490196078433, green: 0.1803921568627451, blue: 0.12941176470588237))
-            TextField("Descripción del incidente",
-                      text: $descripcion)
-                .textFieldStyle(.roundedBorder)
-            VStack(alignment: .leading){
-                Text("Selecciona una categoría")
+            
+            VStack(alignment: .leading, spacing: 16) {
+                Text("What happened?")
                     .fontWeight(.bold)
-                    .foregroundColor(Color(red: 0.13725490196078433, green: 0.1803921568627451, blue: 0.12941176470588237))
-                HStack{
-                    Picker(selection: $categoria, label: Text("Picker")) {
-                        Text("Robo").tag(1)
-                        Text("Acoso").tag(2)
-                        Text("Violencia").tag(3)
-                    }.pickerStyle(.segmented)
-                        .onChange(of: categoria)
-                    {oldValue, newValue in
-                        if (newValue == 1){
-                            categoriaStr = "Comida"
-                        }
-                        else if (newValue == 2){
-                            categoriaStr = "Transporte"
-                        }
-                        else if (newValue == 3){
-                            categoriaStr = "Entretenimiento"
+                
+                TextField("Incident des", text: $des)
+                    .textFieldStyle(.roundedBorder)
+                
+                VStack(alignment: .leading) {
+                    Text("Select a category")
+                        .fontWeight(.bold)
+                    
+                    Picker(selection: $category, label: Text("Category")) {
+                        Text("Robbery").tag(1)
+                        Text("Harassment").tag(2)
+                        Text("Violence").tag(3)
+                    }
+                    .pickerStyle(.segmented)
+                    .tint(.indigo) // Only the Picker is in indigo
+                    .onChange(of: category) { oldValue, newValue in
+                        switch newValue {
+                        case 1:
+                            categoryStr = "Robbery"
+                        case 2:
+                            categoryStr = "Harassment"
+                        case 3:
+                            categoryStr = "Violence"
+                        default:
+                            categoryStr = "Unknown"
                         }
                     }
-                }//hstack
-                HStack{
-                    let impEnString = String(format: "%.0f", sliderVal)
-                    Text("\(impEnString)")
-                    Slider(value: $sliderVal, in: 1...5,
-                           onEditingChanged: { editing in
-                    }
-                    ).tint(.pink)
                 }
-            }//vstack
-    }.padding()
+                
+                VStack(alignment: .leading) {
+                    let importanceString = String(format: "%.0f", sliderValue)
+                    HStack {
+                        Text("Importance: \(importanceString)")
+                            .fontWeight(.medium)
+                        
+                        Slider(value: $sliderValue, in: 1...5)
+                            .tint(.indigo) // Slider is in indigo
+                    }
+                }
+                
+                // Save Button
+                Button(action: saveReport) {
+                    Text("Save Report")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.indigo)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .padding(.top, 16)
+            }
+        }
+        .padding()
+    }
+    
+    // Save report function
+    private func saveReport() {
+        let newReport = Report(des: des, category: categoryStr, importance: Int(sliderValue))
+        
+        // Save the report using the model context
+        do {
+            try modelContext.save(newReport)
+            // Reset the form after saving
+            resetForm()
+        } catch {
+            print("Failed to save report: \(error)")
+        }
+    }
+    
+    // Resets the form fields
+    private func resetForm() {
+        des = ""
+        category = 1
+        categoryStr = "Robbery"
+        sliderValue = 1.0
     }
 }
 
 #Preview {
-    ReporteView()
+    ReportView()
 }
