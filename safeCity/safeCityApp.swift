@@ -9,6 +9,27 @@ import SwiftUI
 
 @main
 struct safeCityApp: App {
+    init() {
+            // Customize the tab bar appearance
+            let appearance = UITabBarAppearance()
+            appearance.configureWithOpaqueBackground()
+
+            // Set the background color for the tab bar
+            appearance.backgroundColor = UIColor.white
+
+            // Customize selected item appearance
+            appearance.stackedLayoutAppearance.selected.iconColor = UIColor.systemIndigo
+            appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor.systemIndigo]
+
+            // Customize unselected item appearance
+            appearance.stackedLayoutAppearance.normal.iconColor = UIColor.gray
+            appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.gray]
+
+            // Apply the appearance to the tab bar
+            UITabBar.appearance().standardAppearance = appearance
+            UITabBar.appearance().scrollEdgeAppearance = appearance
+        }
+    
     @StateObject private var sensorManager = SensorManager()
     @State private var locationManager = LocationManager()
     

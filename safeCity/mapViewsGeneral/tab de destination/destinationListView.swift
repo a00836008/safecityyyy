@@ -32,6 +32,8 @@ struct DestinationsListView: View {
                                     
                                     VStack(alignment: .leading) {
                                         Text(destination.name)
+                                            .font(.headline)
+                                            .foregroundColor(.indigo)
                                         Text("^[\(destination.placemarks.count) location](inflect: true)")
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
@@ -49,7 +51,7 @@ struct DestinationsListView: View {
                                 selectedDestination = destination
                                 showAddReportView.toggle()
                             }) {
-                                Image(systemName: "exclamationmark.circle.fill")
+                                Image(systemName: "exclamationmark.bubble")
                                     .foregroundColor(.red)
                                     .imageScale(.large)
                                     .padding(.trailing)
@@ -80,6 +82,7 @@ struct DestinationsListView: View {
                     newDestination.toggle()
                 } label: {
                     Image(systemName: "plus.circle.fill")
+                        .foregroundColor(.indigo)
                 }
                 .alert(
                     "Enter Destination Name",
