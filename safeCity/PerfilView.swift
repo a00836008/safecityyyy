@@ -62,14 +62,14 @@ struct PerfilView: View {
                     Button(action: {
                         showAlert = true
                     }) {
-                        Text("Cerrar sesión")
+                        Text("LogOut")
                             .foregroundColor(.gray)
                             .padding(.vertical, 12)
                             .padding(.horizontal,120)
                             .background(Color.gray.opacity(0.2))
                             .frame( alignment: .center)
                             .clipShape(Capsule())
-                            .offset(x: 18)
+                            .offset(x: 40)
                             
                     }
                     .alert("¿Estás seguro?", isPresented: $showAlert) {
@@ -91,7 +91,7 @@ struct PerfilView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Mi Perfil")
+                    Text("My Profile")
                         .font(.system(size: 30))
                         .fontWeight(.bold)
                         .offset(y: 70)
