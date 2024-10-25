@@ -9,7 +9,7 @@ class Report {
     var importance: Int
     var dateCreated: Date
     var destination: Destination? // Reference to Destination
-    
+
     init(des: String, category: String, importance: Int, destination: Destination? = nil) {
         self.id = UUID()
         self.des = des

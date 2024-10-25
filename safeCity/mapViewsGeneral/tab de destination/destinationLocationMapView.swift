@@ -53,16 +53,15 @@ struct DestinationLocationsMapView: View {
             Map(position: $cameraPosition, selection: $selectedPlacemark) {
                 ForEach(listPlacemarks) { placemark in
                     if isManualMarker {
-                        if placemark.destination != nil {
+                        let hasReport = destination.reports.isEmpty == false
+                        
+                        if hasReport {
+                            // Display red alert marker if there are reports
                             Marker(coordinate: placemark.coordinate) {
-                                Label(placemark.name, systemImage: "star")
+                                Label(placemark.name, systemImage: "exclamationmark.triangle.fill")
                             }
-                            .tint(.yellow)
+                            .tint(.red)
                         } else {
-                            Marker(placemark.name, coordinate: placemark.coordinate)
-                        }
-                    } else {
-                        Group {
                             if placemark.destination != nil {
                                 Marker(coordinate: placemark.coordinate) {
                                     Label(placemark.name, systemImage: "star")
@@ -70,9 +69,31 @@ struct DestinationLocationsMapView: View {
                                 .tint(.yellow)
                             } else {
                                 Marker(placemark.name, coordinate: placemark.coordinate)
+                            }}
+                    } else {
+                        Group {
+                    // Check if the placemark's destination has reports
+                            let hasReport = destination.reports.isEmpty == false
+                            
+                            if hasReport {
+                                // Display red alert marker if there are reports
+                                Marker(coordinate: placemark.coordinate) {
+                                    Label(placemark.name, systemImage: "exclamationmark.triangle.fill")
+                                }
+                                .tint(.red)
+                            } else {
+                                // Default yellow star marker for destinations
+                                if placemark.destination != nil {
+                                    Marker(coordinate: placemark.coordinate) {
+                                        Label(placemark.name, systemImage: "star")
+                                    }
+                                    .tint(.yellow)
+                                } else {
+                                    Marker(placemark.name, coordinate: placemark.coordinate)
+                                }
                             }
                         }.tag(placemark)
-                    }
+            }
                 }
             }
             .onTapGesture { position in

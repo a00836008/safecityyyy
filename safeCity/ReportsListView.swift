@@ -11,8 +11,14 @@ import SwiftData
 struct ReportsListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Report.dateCreated, order: .reverse) private var reports: [Report]
-    @State private var path = NavigationPath()
+    @Query(sort: \Destination.name) private var destinations: [Destination] // Query for available destinations
     
+    @State private var path = NavigationPath()
+    @State private var showAddReportView = false
+    @State private var selectedDestination: Destination? // Track the selected destination
+    @State private var showDestinationPicker = false // Flag to show picker sheet
+    @State private var selectedPickerIndex: Int = 0 // Track selected index in Picker
+
     var body: some View {
         NavigationStack(path: $path) {
             Group {
@@ -63,17 +69,62 @@ struct ReportsListView: View {
                     ContentUnavailableView(
                         "No Reports",
                         systemImage: "doc.plaintext",
-                        des: Text("You haven't created any reports yet.")
+                        description: Text("You haven't created any reports yet.")
                     )
                 }
             }
             .navigationTitle("Reports")
             .toolbar {
-                EditButton()
+                // Button to add a new report
+                Button(action: {
+                    selectDestination() // Show a destination selection before report creation
+                }) {
+                    Image(systemName: "plus.circle.fill")
+                        .foregroundColor(.indigo)
+                }
+            }
+            // Show destination picker if flag is set
+            .sheet(isPresented: $showDestinationPicker) {
+                VStack {
+                    Text("Select a Destination")
+                        .font(.headline)
+                        .padding()
+
+                    if destinations.isEmpty {
+                        Text("No available destinations.")
+                            .foregroundColor(.gray)
+                            .padding()
+                    } else {
+                        Picker("Choose Destination", selection: $selectedPickerIndex) {
+                            ForEach(destinations.indices, id: \.self) { index in
+                                Text(destinations[index].name).tag(index)
+                            }
+                        }
+                        .pickerStyle(WheelPickerStyle())
+                        .labelsHidden()
+                        .padding()
+
+                        Button("Confirm") {
+                            // Set the selected destination and proceed
+                            selectedDestination = destinations[selectedPickerIndex]
+                            showAddReportView = true
+                            showDestinationPicker = false
+                        }
+                        .padding()
+                        .foregroundColor(.white)
+                        .background(Color.indigo)
+                        .cornerRadius(8)
+                    }
+                }
+            }
+            // Sheet presentation for adding a new report
+            .sheet(isPresented: $showAddReportView) {
+                // Pass the selected destination to ReportView
+                ReportView(destination: selectedDestination)
             }
         }
     }
-    
+
     // Helper function to format date
     private func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
@@ -81,9 +132,16 @@ struct ReportsListView: View {
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
-}
-
-#Preview {
-    ReportsListView()
-        .modelContainer(Report.preview)
+    
+    // Function to show a destination picker
+    private func selectDestination() {
+        // If there are destinations, allow selection
+        if !destinations.isEmpty {
+            showDestinationPicker = true
+        } else {
+            // If no destinations are available, set to nil and proceed
+            selectedDestination = nil
+            showAddReportView.toggle()
+        }
+    }
 }
